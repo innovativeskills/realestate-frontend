@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from 'api';
 
 const initialData = [
-  { name: 'John Doe', description: 'Good to take', image: 'www.example.com/images/8' },
-  { name: 'Rahim Uddin', description: 'Average', image: 'www.example.com/images/9' },
+  { id: 1, name: 'John Doe', description: 'Good to take', image: 'www.example.com/images/8' },
+  { id: 2, name: 'Rahim Uddin', description: 'Average', image: 'www.example.com/images/9' }
 ];
 
 const fetchClientReview = createAsyncThunk('fetchClientReview', async (url) => {

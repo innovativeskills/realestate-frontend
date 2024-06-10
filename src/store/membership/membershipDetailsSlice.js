@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from 'api';
 
-const initialData = [
-  { title: 'Munna Ahmed', description: 'Good to take', image: 'www.example.com/images/8' },
-  { title: 'Rahim Uddin', description: 'Average', image: 'www.example.com/images/9' }
-];
+const initialData = [{ id: 1, title: 'Default Title', description: 'Good to take', image: 'www.example.com/images/8' }];
 
 const fetchMembershipDetails = createAsyncThunk('fetchMembershipDetails', async (url) => {
   const response = await apiService.getData(url);

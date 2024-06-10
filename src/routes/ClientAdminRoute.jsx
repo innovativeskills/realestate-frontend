@@ -5,6 +5,7 @@ import Loadable from 'ui-component/Loadable';
 
 //protected guard component
 import AuthGuard from 'components/shared/Authentication/AuthGuard';
+import UtilitiesShadow from 'views/utilities/Shadow';
 
 //client page imports
 const EntryPage = Loadable(lazy(() => import('views/client/EntryPage')));
@@ -19,6 +20,11 @@ const MembershipInfo = Loadable(lazy(() => import('views/admin/animations/member
 const CompanySummary = Loadable(lazy(() => import('views/admin/company/summary/CompanySummary')));
 const ClientReviewInputPage = Loadable(lazy(() => import('views/admin/clients/review/ClientReview')));
 const ContactInfo = Loadable(lazy(() => import('views/admin/company/ContactInfo')));
+const InvestmentInfo = Loadable(lazy(() => import('views/admin/company/investment/InvestmentInfo')));
+const TeamMemberDetails = Loadable(lazy(() => import('views/admin/company/team-member/TeamMemberDetails')));
+const UserContact = Loadable(lazy(() => import('views/admin/clients/contact/UserContact')));
+const ProjectInfo = Loadable(lazy(() => import('views/admin/project/project-info/ProjectInfo')));
+const ProjectSummary = Loadable(lazy(() => import('views/admin/project/project-summary/ProjectSummary')));
 
 // ==============================|| APPLICATION ROUTING ||============================== //
 
@@ -94,6 +100,22 @@ const ClientAdminRoutes = [
                     <ContactInfo />
                   </AuthGuard>
                 )
+              },
+              {
+                path: 'investment',
+                element: (
+                  <AuthGuard>
+                    <InvestmentInfo />
+                  </AuthGuard>
+                )
+              },
+              {
+                path: 'team-member',
+                element: (
+                  <AuthGuard>
+                    <TeamMemberDetails />
+                  </AuthGuard>
+                )
               }
             ]
           },
@@ -106,6 +128,36 @@ const ClientAdminRoutes = [
                 element: (
                   <AuthGuard>
                     <ClientReviewInputPage />
+                  </AuthGuard>
+                )
+              },
+              {
+                path: 'contact',
+                element: (
+                  <AuthGuard>
+                    <UserContact />
+                  </AuthGuard>
+                )
+              }
+            ]
+          },
+          //client project routing---------
+          {
+            path: '/admin/project',
+            children: [
+              {
+                path: 'projectInfo',
+                element: (
+                  <AuthGuard>
+                    <ProjectInfo />
+                  </AuthGuard>
+                )
+              },
+              {
+                path: 'summary',
+                element: (
+                  <AuthGuard>
+                    <ProjectSummary />
                   </AuthGuard>
                 )
               }

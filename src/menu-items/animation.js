@@ -1,9 +1,10 @@
 // assets
-import { IconSlideshow } from '@tabler/icons-react';
+import { IconSlideshow, IconUser } from '@tabler/icons-react';
 
 // constant
 const icons = {
-  IconSlideshow
+  IconSlideshow,
+  IconUser
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -26,9 +27,9 @@ const animations = {
       title: 'Membership',
       type: 'item',
       url: 'animation/membership',
-      icon: icons.IconSlideshow,
+      icon: icons.IconUser,
       breadcrumbs: false
-    },
+    }
   ]
 };
 

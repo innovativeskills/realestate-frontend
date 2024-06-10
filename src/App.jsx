@@ -13,13 +13,11 @@ import themes from 'themes';
 
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
-import { useEffect } from 'react';
-import { fetchCategory } from 'store/category/categoryReducer';
-import { fetchSubCategories } from 'store/sub-category/SubCategoryReducer';
-import { fetchTeacherDetails } from 'store/teacher/teacherReducer';
-import { fetchCourseDetails } from 'store/course/courseDetailsReducer';
+import { useEffect } from 'react';;
 import { fetchContactInfo } from 'store/company/contactInfoSlice';
 import { fetchCompanySummary } from 'store/company/companySummary';
+import { fetchBannerDetails } from 'store/banner/banner';
+import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
 
 // ==============================|| APP ||============================== //
 
@@ -30,10 +28,8 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchContactInfo('https://realestateback.innovativeskillsbd.com/api/contactinfo/'));
     dispatch(fetchCompanySummary('https://realestateback.innovativeskillsbd.com/api/companysummary/'));
-    // dispatch(fetchCategory('https://website.innovativeskillsbd.com/mainCategories/categories/')); //category api
-    // dispatch(fetchSubCategories('https://website.innovativeskillsbd.com/subCategories/subcategories/')); //subcategory api
-    // dispatch(fetchTeacherDetails('https://website.innovativeskillsbd.com/teacher/teachers/')); //teacher api
-    // dispatch(fetchCourseDetails('https://website.innovativeskillsbd.com/course/courses/')); //course api
+    dispatch(fetchBannerDetails('https://realestateback.innovativeskillsbd.com/api/banner/'));
+    dispatch(fetchMembershipDetails('https://realestateback.innovativeskillsbd.com/api/membership/'));
   }, []);
 
   return (

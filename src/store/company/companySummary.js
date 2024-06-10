@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from 'api';
 
-const initialData = [
-  { title: 'Tech Partners', amount: 16, icon: '<i class="fa fa-google"></i>' },
-];
+const initialData = [{ id: 1, title: 'Tech Partners', amount: 16, icon: '<i class="fa fa-google"></i>' }];
 
 const fetchCompanySummary = createAsyncThunk('fetchCompanySummary', async (url) => {
-  console.log('called summary async')
   const response = await apiService.getData(url);
   return response.data;
 });

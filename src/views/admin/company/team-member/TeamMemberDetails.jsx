@@ -28,23 +28,32 @@ import { fetchClientReview } from 'store/client-review/clientReview';
 import MemberShipEditModal from 'components/modal/edit-modal/membership/MemberShipEditModal';
 import TextEditor from 'components/shared/TextEditor';
 import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
+import TeamMemberEditModal from 'components/modal/edit-modal/team-member/TeamMemberEditModal';
+import { fetchTeamMember } from 'store/company/teamMemberSlice';
 
 const initialInputValue = {
-  title: '',
+  name: '',
   description: '',
-  image: ''
+  image: '',
+  phone_number: '',
+  email: '',
+  facebook_link: '',
+  twitter_link: '',
+  instagram_link: '',
+  linkedin_link: '',
+  dribble_link: ''
 };
 
 const membershipURL = 'https://realestateback.innovativeskillsbd.com/api/membership/';
+const teamMemberURL = 'url';
 
-const MembershipInfo = () => {
+const TeamMemberDetails = () => {
   const dispatch = useDispatch();
-  // const clientReviewFromState = useSelector((state) => state.clientReview);
-  const mebershDetailsFromState = useSelector((state) => state.membership);
-  const [membershipDetailsInput, setMembershipDetailsInput] = useState(initialInputValue);
-  const [membershipDetailsList, setMembershipDetailsList] = useState(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  const [filteredMembershipDetailsList, setFilteredMembershipDetailsList] = useState(
-    membershipDetailsList.length ? membershipDetailsList : []
+  const teamMemberFromState = useSelector((state) => state.teamMember);
+  const [teamMemberDetailsInput, setTeamMemberDetailsInput] = useState(initialInputValue);
+  const [teamMemberDetailsList, setTeamMemberDetailsList] = useState(teamMemberFromState.length ? teamMemberFromState : []);
+  const [filteredTeamMemberDetailsList, setfilteredTeamMemberDetailsList] = useState(
+    teamMemberDetailsList.length ? teamMemberDetailsList : []
   );
   const [searchInput, setSearchInput] = useState('');
   const [postPerPage, setPostPerPage] = useState(5);
@@ -54,30 +63,29 @@ const MembershipInfo = () => {
   const [selectedEditItem, setSelectedEditItem] = useState('');
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const currentMembershipDetailsList = filteredMembershipDetailsList.length
-    ? filteredMembershipDetailsList.slice(firstPostIndex, lastPostIndex)
+  const currentTeamMemberDetailsList = filteredTeamMemberDetailsList.length
+    ? filteredTeamMemberDetailsList.slice(firstPostIndex, lastPostIndex)
     : [];
   const [updatedField, setUpdatedField] = useState(null);
-
   useEffect(() => {
-    const result = membershipDetailsList.filter((item) => {
-      return searchInput.toLowerCase() === '' ? item : item.title.toLowerCase().includes(searchInput.toLowerCase());
+    const result = teamMemberDetailsList.filter((item) => {
+      return searchInput.toLowerCase() === '' ? item : item.name.toLowerCase().includes(searchInput.toLowerCase());
     });
-    setFilteredMembershipDetailsList(result);
-  }, [searchInput, membershipDetailsList]);
+    setfilteredTeamMemberDetailsList(result);
+  }, [searchInput, teamMemberDetailsInput]);
 
-  if (filteredMembershipDetailsList.length) {
-    if (Math.ceil(filteredMembershipDetailsList.length / postPerPage) < currentPage) {
+  if (filteredTeamMemberDetailsList.length) {
+    if (Math.ceil(filteredTeamMemberDetailsList.length / postPerPage) < currentPage) {
       setcurrentPage(1);
     }
   }
 
   useEffect(() => {
-    setMembershipDetailsList(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  }, [mebershDetailsFromState]);
+    setTeamMemberDetailsList(teamMemberFromState.length ? teamMemberFromState : []);
+  }, [teamMemberFromState]);
 
   const handleInputValueChange = (e) => {
-    setMembershipDetailsInput((prev) => {
+    setTeamMemberDetailsInput((prev) => {
       return {
         ...prev,
         [e.target.name]: e.target.value
@@ -85,7 +93,7 @@ const MembershipInfo = () => {
     });
   };
   const handleEditorValueChange = (content) => {
-    setMembershipDetailsInput((prev) => {
+    setTeamMemberDetailsInput((prev) => {
       return {
         ...prev,
         description: content
@@ -93,7 +101,7 @@ const MembershipInfo = () => {
     });
   };
   const handleFileChange = (event) => {
-    setMembershipDetailsInput((prev) => {
+    setTeamMemberDetailsInput((prev) => {
       return {
         ...prev,
         [event.target.name]: event.target.files[0]
@@ -103,17 +111,17 @@ const MembershipInfo = () => {
   const handleInputValueSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    for (const key in membershipDetailsInput) {
-      if (Object.hasOwnProperty.call(membershipDetailsInput, key)) {
-        const value = membershipDetailsInput[key];
+    for (const key in teamMemberDetailsInput) {
+      if (Object.hasOwnProperty.call(teamMemberDetailsInput, key)) {
+        const value = teamMemberDetailsInput[key];
         formData.append(key, value);
       }
     }
-    const response = await apiService.postDataAsFormData(membershipURL, formData);
+    const response = await apiService.postDataAsFormData(teamMemberURL, formData);
     if (response.status == 201) {
       toast.success('Successfully added!');
-      dispatch(fetchMembershipDetails(membershipURL));
-      membershipDetailsInput(initialInputValue);
+      // dispatch(fetchMembershipDetails(membershipURL));
+      setTeamMemberDetailsInput(initialInputValue);
     } else if (response.response.status == 400) {
       const resultArray = errorObjectValueToArray(response.response.data);
       toast.error(`${toTitleCase(resultArray[0])}`);
@@ -134,11 +142,11 @@ const MembershipInfo = () => {
 
   const handleDeleteConfirm = async () => {
     const id = selectedEditItem.id;
-    const response = await apiService.deleteData(`${membershipURL}${id}/`);
+    const response = await apiService.deleteData(`${teamMemberURL}${id}/`);
     if (response.status == 204) {
       setIsDeleteModalOpen(false);
       toast.success('Deleted successfully');
-      dispatch(fetchMembershipDetails(membershipURL));
+      dispatch(fetchTeamMember(teamMemberURL));
     } else {
       toast.error('Something went wrong');
     }
@@ -177,7 +185,6 @@ const MembershipInfo = () => {
 
   const handleConfirmEdit = async () => {
     const id = selectedEditItem.id;
-    console.log(selectedEditItem);
     const formData = new FormData();
     if (updatedField) {
       for (const key in updatedField) {
@@ -187,12 +194,11 @@ const MembershipInfo = () => {
         }
       }
     }
-
-    const response = await apiService.updateDataAsFormData(`${membershipURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${teamMemberURL}${id}`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
-      dispatch(fetchMembershipDetails(membershipURL)); //dispatch action to update state
+      dispatch(fetchTeamMember(teamMemberURL)); //dispatch action to update state
     } else {
       toast.error('Something went wrong.');
       setIsEditModalShow(false);
@@ -203,7 +209,7 @@ const MembershipInfo = () => {
   };
 
   return (
-    <MainCard title="Membership Input">
+    <MainCard title="Team Member Input">
       {/* input form start */}
       <form onSubmit={handleInputValueSubmit} style={{ marginBottom: '20px' }}>
         <Box>
@@ -212,10 +218,10 @@ const MembershipInfo = () => {
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                label="Title"
-                id="title"
-                name="title"
-                value={membershipDetailsInput.title}
+                label="Name"
+                id="name"
+                name="name"
+                value={teamMemberDetailsInput.name}
                 onChange={handleInputValueChange}
                 required
               />
@@ -236,9 +242,99 @@ const MembershipInfo = () => {
               </Grid>
             </Grid>
           </Grid>
+          {/* Two half-width input boxes */}
+          <Grid container spacing={2} mb={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Phone"
+                id="phone_number"
+                name="phone_number"
+                value={teamMemberDetailsInput.phone_number}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                type="email"
+                fullWidth
+                label="Email"
+                id="email"
+                name="email"
+                value={teamMemberDetailsInput.email}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+          </Grid>
+          {/* Two half-width input boxes */}
+          <Grid container spacing={2} mb={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Facebook"
+                id="facebook_link"
+                name="facebook_link"
+                value={teamMemberDetailsInput.facebook_link}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Instagram"
+                id="instagram_link"
+                name="instagram_link"
+                value={teamMemberDetailsInput.instagram_link}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+          </Grid>
+          {/* Two half-width input boxes */}
+          <Grid container spacing={2} mb={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Linkedin"
+                id="linkedin_link"
+                name="linkedin_link"
+                value={teamMemberDetailsInput.linkedin_link}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Twitter"
+                id="twitter_link"
+                name="twitter_link"
+                value={teamMemberDetailsInput.twitter_link}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+          </Grid>
+          {/* Two half-width input boxes */}
+          <Grid container spacing={2} mb={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Dribble"
+                id="dribble_link"
+                name="dribble_link"
+                value={teamMemberDetailsInput.dribble_link}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+          </Grid>
           {/* Full-width input box */}
           <Box mb={2}>
-            <TextEditor value={membershipDetailsInput.description} handlechange={handleEditorValueChange} label={'Description input'} />
+            <TextEditor value={teamMemberDetailsInput.description} handlechange={handleEditorValueChange} label={'Description input'} />
           </Box>
 
           {/* Submit button */}
@@ -253,7 +349,7 @@ const MembershipInfo = () => {
       </form>
       {/* input form end */}
 
-      <SubCard title="Membership List">
+      <SubCard title="Team Member List">
         {/* table section start */}
         <div>
           {/* pre table section start */}
@@ -277,11 +373,11 @@ const MembershipInfo = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentMembershipDetailsList &&
-                  currentMembershipDetailsList.map((row, index) => (
+                {currentTeamMemberDetailsList &&
+                  currentTeamMemberDetailsList.map((row, index) => (
                     <TableRow key={uid()}>
                       <TableCell>{(currentPage - 1) * postPerPage + 1 + index}</TableCell>
-                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.name}</TableCell>
                       <TableCell>
                         <Button onClick={() => handleEditClick(row)} variant="contained" color="primary" style={{ marginRight: '5px' }}>
                           Edit
@@ -302,7 +398,7 @@ const MembershipInfo = () => {
             changePage={changePage}
             currentPage={currentPage}
             postPerPage={postPerPage}
-            totalPost={membershipDetailsList.length}
+            totalPost={teamMemberDetailsList.length}
           />
           {/* pagination section end */}
         </div>
@@ -312,7 +408,16 @@ const MembershipInfo = () => {
       <DeleteModal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose} handleDelete={handleDeleteConfirm} />
 
       {/* Edit Modal */}
-      <MemberShipEditModal
+      {/* <MemberShipEditModal
+        isOpen={isEditModalshow}
+        onClose={handleEditModalClose}
+        handleSubmit={handleConfirmEdit}
+        selectedEditItem={selectedEditItem}
+        setSelectedEditItem={setSelectedEditItem}
+        setUpdate={setUpdatedField}
+        handleTextEditorChange={handleTextEditorValueChange}
+      /> */}
+      <TeamMemberEditModal
         isOpen={isEditModalshow}
         onClose={handleEditModalClose}
         handleSubmit={handleConfirmEdit}
@@ -325,4 +430,4 @@ const MembershipInfo = () => {
   );
 };
 
-export default MembershipInfo;
+export default TeamMemberDetails;

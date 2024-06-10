@@ -5,47 +5,34 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import MainCard from 'ui-component/cards/MainCard';
 import SubCard from 'ui-component/cards/SubCard';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  Typography,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Grid,
-  TextField,
-  Button
-} from '@mui/material';
 import SearchInput from 'components/shared/SearchInput';
 import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchClientReview } from 'store/client-review/clientReview';
-import MemberShipEditModal from 'components/modal/edit-modal/membership/MemberShipEditModal';
-import TextEditor from 'components/shared/TextEditor';
-import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Grid, TextField, Button } from '@mui/material';
+
+import { fetchContactInfo } from 'store/company/contactInfoSlice';
+import ContactInfoEditModal from 'components/modal/edit-modal/contact-info/ContactInfoEditModal';
+import { fetchUserContact } from 'store/user-contact/userContactSlice';
+import UserContactModal from 'components/modal/edit-modal/user-contact/UserContactModal';
 
 const initialInputValue = {
-  title: '',
-  description: '',
-  image: ''
+  name: '',
+  phone_number: '',
+  email: '',
+  subject: '',
+  message: ''
 };
 
-const membershipURL = 'https://realestateback.innovativeskillsbd.com/api/membership/';
+const userContactURL = 'URL';
 
-const MembershipInfo = () => {
+const UserContact = () => {
   const dispatch = useDispatch();
-  // const clientReviewFromState = useSelector((state) => state.clientReview);
-  const mebershDetailsFromState = useSelector((state) => state.membership);
-  const [membershipDetailsInput, setMembershipDetailsInput] = useState(initialInputValue);
-  const [membershipDetailsList, setMembershipDetailsList] = useState(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  const [filteredMembershipDetailsList, setFilteredMembershipDetailsList] = useState(
-    membershipDetailsList.length ? membershipDetailsList : []
-  );
+  const userContactFromState = useSelector((state) => state.userContact);
+  const [userContactInput, setUserContactInput] = useState(initialInputValue);
+  const [userContactList, setUserContactList] = useState(userContactFromState.length ? userContactFromState : []);
+  const [filtereduUerContactList, setFiltereduUerContactList] = useState(userContactList.length ? userContactList : []);
   const [searchInput, setSearchInput] = useState('');
   const [postPerPage, setPostPerPage] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
@@ -54,66 +41,41 @@ const MembershipInfo = () => {
   const [selectedEditItem, setSelectedEditItem] = useState('');
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const currentMembershipDetailsList = filteredMembershipDetailsList.length
-    ? filteredMembershipDetailsList.slice(firstPostIndex, lastPostIndex)
-    : [];
+  const currentUserContactList = filtereduUerContactList.length ? filtereduUerContactList.slice(firstPostIndex, lastPostIndex) : [];
   const [updatedField, setUpdatedField] = useState(null);
-
   useEffect(() => {
-    const result = membershipDetailsList.filter((item) => {
-      return searchInput.toLowerCase() === '' ? item : item.title.toLowerCase().includes(searchInput.toLowerCase());
+    const result = userContactList.filter((item) => {
+      return searchInput.toLowerCase() === '' ? item : item.name.toLowerCase().includes(searchInput.toLowerCase());
     });
-    setFilteredMembershipDetailsList(result);
-  }, [searchInput, membershipDetailsList]);
+    setFiltereduUerContactList(result);
+  }, [searchInput, userContactList]);
 
-  if (filteredMembershipDetailsList.length) {
-    if (Math.ceil(filteredMembershipDetailsList.length / postPerPage) < currentPage) {
+  if (filtereduUerContactList.length) {
+    if (Math.ceil(filtereduUerContactList.length / postPerPage) < currentPage) {
       setcurrentPage(1);
     }
   }
 
   useEffect(() => {
-    setMembershipDetailsList(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  }, [mebershDetailsFromState]);
+    setUserContactList(userContactFromState.length ? userContactFromState : []);
+  }, [userContactFromState]);
 
   const handleInputValueChange = (e) => {
-    setMembershipDetailsInput((prev) => {
+    setUserContactInput((prev) => {
       return {
         ...prev,
         [e.target.name]: e.target.value
       };
     });
   };
-  const handleEditorValueChange = (content) => {
-    setMembershipDetailsInput((prev) => {
-      return {
-        ...prev,
-        description: content
-      };
-    });
-  };
-  const handleFileChange = (event) => {
-    setMembershipDetailsInput((prev) => {
-      return {
-        ...prev,
-        [event.target.name]: event.target.files[0]
-      };
-    });
-  };
+
   const handleInputValueSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    for (const key in membershipDetailsInput) {
-      if (Object.hasOwnProperty.call(membershipDetailsInput, key)) {
-        const value = membershipDetailsInput[key];
-        formData.append(key, value);
-      }
-    }
-    const response = await apiService.postDataAsFormData(membershipURL, formData);
+    const response = await apiService.postData(userContactURL, JSON.stringify(userContactInput));
     if (response.status == 201) {
       toast.success('Successfully added!');
-      dispatch(fetchMembershipDetails(membershipURL));
-      membershipDetailsInput(initialInputValue);
+      dispatch(fetchUserContact(userContactURL));
+      setUserContactInput(initialInputValue);
     } else if (response.response.status == 400) {
       const resultArray = errorObjectValueToArray(response.response.data);
       toast.error(`${toTitleCase(resultArray[0])}`);
@@ -134,11 +96,11 @@ const MembershipInfo = () => {
 
   const handleDeleteConfirm = async () => {
     const id = selectedEditItem.id;
-    const response = await apiService.deleteData(`${membershipURL}${id}/`);
+    const response = await apiService.deleteData(`${userContactURL}${id}/`);
     if (response.status == 204) {
       setIsDeleteModalOpen(false);
       toast.success('Deleted successfully');
-      dispatch(fetchMembershipDetails(membershipURL));
+      dispatch(fetchUserContact(userContactURL));
     } else {
       toast.error('Something went wrong');
     }
@@ -159,51 +121,21 @@ const MembershipInfo = () => {
     setIsEditModalShow(true);
   };
 
-  const handleTextEditorValueChange = (content) => {
-    setSelectedEditItem((prev) => {
-      return {
-        ...prev,
-        description: content
-      };
-    });
-
-    setUpdatedField((prev) => {
-      return {
-        ...prev,
-        description: content
-      };
-    });
-  };
-
   const handleConfirmEdit = async () => {
     const id = selectedEditItem.id;
-    console.log(selectedEditItem);
-    const formData = new FormData();
-    if (updatedField) {
-      for (const key in updatedField) {
-        if (Object.hasOwnProperty.call(updatedField, key)) {
-          const value = updatedField[key];
-          formData.append(key, value);
-        }
-      }
-    }
-
-    const response = await apiService.updateDataAsFormData(`${membershipURL}${id}`, formData);
+    const response = await apiService.updateData(`${userContactURL}${id}/`, JSON.stringify(updatedField));
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
-      dispatch(fetchMembershipDetails(membershipURL)); //dispatch action to update state
+      dispatch(fetchUserContact(userContactURL)); //dispatch action to update state
     } else {
       toast.error('Something went wrong.');
       setIsEditModalShow(false);
     }
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
   };
 
   return (
-    <MainCard title="Membership Input">
+    <MainCard title="User Contact Input">
       {/* input form start */}
       <form onSubmit={handleInputValueSubmit} style={{ marginBottom: '20px' }}>
         <Box>
@@ -212,37 +144,63 @@ const MembershipInfo = () => {
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                label="Title"
-                id="title"
-                name="title"
-                value={membershipDetailsInput.title}
+                label="Name"
+                id="name"
+                name="name"
+                value={userContactInput.name}
                 onChange={handleInputValueChange}
                 required
               />
             </Grid>
             <Grid item xs={6}>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <Box display="flex" alignItems="center">
-                    <Typography variant="h5" gutterBottom sx={{ marginLeft: 1 }}>
-                      Client Image
-                    </Typography>
-                    <Button variant="outlined" color="secondary" component="label" sx={{ marginLeft: 5 }}>
-                      Upload File
-                      <input type="file" name="image" onChange={handleFileChange} />
-                    </Button>
-                  </Box>
-                </Grid>
-              </Grid>
+              <TextField fullWidth label="Email" id="email" name="email" value={userContactInput.email} onChange={handleInputValueChange} />
             </Grid>
           </Grid>
+          {/* Two half-width input boxes */}
+          <Grid container spacing={2} mb={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Phone Number"
+                id="phone_number"
+                name="phone_number"
+                value={userContactInput.phone_number}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Subject"
+                id="subject"
+                name="subject"
+                value={userContactInput.subject}
+                onChange={handleInputValueChange}
+                required
+              />
+            </Grid>
+          </Grid>
+          {/* Two half-width input boxes */}
+
           {/* Full-width input box */}
           <Box mb={2}>
-            <TextEditor value={membershipDetailsInput.description} handlechange={handleEditorValueChange} label={'Description input'} />
+            <TextField
+              fullWidth
+              label="Message"
+              id="message"
+              name="message"
+              value={userContactInput.message}
+              onChange={handleInputValueChange}
+              required
+              inputProps={{ minLength: 3 }}
+              multiline
+              rows={4}
+            />
           </Box>
 
           {/* Submit button */}
-          <Grid container justifyContent="flex-start" mt={6}>
+          <Grid container justifyContent="flex-start" mt={2}>
             <Grid item>
               <Button variant="contained" color="secondary" type="submit">
                 Submit
@@ -253,7 +211,7 @@ const MembershipInfo = () => {
       </form>
       {/* input form end */}
 
-      <SubCard title="Membership List">
+      <SubCard title="User Contact List">
         {/* table section start */}
         <div>
           {/* pre table section start */}
@@ -277,11 +235,11 @@ const MembershipInfo = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentMembershipDetailsList &&
-                  currentMembershipDetailsList.map((row, index) => (
+                {currentUserContactList &&
+                  currentUserContactList.map((row, index) => (
                     <TableRow key={uid()}>
                       <TableCell>{(currentPage - 1) * postPerPage + 1 + index}</TableCell>
-                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.name}</TableCell>
                       <TableCell>
                         <Button onClick={() => handleEditClick(row)} variant="contained" color="primary" style={{ marginRight: '5px' }}>
                           Edit
@@ -302,7 +260,7 @@ const MembershipInfo = () => {
             changePage={changePage}
             currentPage={currentPage}
             postPerPage={postPerPage}
-            totalPost={membershipDetailsList.length}
+            totalPost={userContactList.length}
           />
           {/* pagination section end */}
         </div>
@@ -312,17 +270,16 @@ const MembershipInfo = () => {
       <DeleteModal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose} handleDelete={handleDeleteConfirm} />
 
       {/* Edit Modal */}
-      <MemberShipEditModal
+      <UserContactModal
         isOpen={isEditModalshow}
         onClose={handleEditModalClose}
         handleSubmit={handleConfirmEdit}
         selectedEditItem={selectedEditItem}
         setSelectedEditItem={setSelectedEditItem}
         setUpdate={setUpdatedField}
-        handleTextEditorChange={handleTextEditorValueChange}
       />
     </MainCard>
   );
 };
 
-export default MembershipInfo;
+export default UserContact;

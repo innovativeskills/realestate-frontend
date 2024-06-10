@@ -1,10 +1,12 @@
 // assets
-import { IconStar, IconPhone } from '@tabler/icons-react';
+import { IconStar, IconPhone, IconReportMoney, IconUsersGroup } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconPhone,
-  IconStar
+  IconStar,
+  IconReportMoney,
+  IconUsersGroup
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -28,6 +30,22 @@ const companyInfo = {
       type: 'item',
       url: 'company/contact',
       icon: icons.IconPhone,
+      breadcrumbs: false
+    },
+    {
+      id: 'investment',
+      title: 'Investment',
+      type: 'item',
+      url: 'company/investment',
+      icon: icons.IconReportMoney,
+      breadcrumbs: false
+    },
+    {
+      id: 'teamMember',
+      title: 'Team Member',
+      type: 'item',
+      url: 'company/team-member',
+      icon: icons.IconUsersGroup,
       breadcrumbs: false
     }
   ]

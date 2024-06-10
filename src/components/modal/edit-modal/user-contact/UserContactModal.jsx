@@ -13,7 +13,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ContactInfoEditModal({ isOpen, onClose, selectedEditItem, setSelectedEditItem, handleSubmit, setUpdate }) {
+export default function UserContactModal({ isOpen, onClose, selectedEditItem, setSelectedEditItem, handleSubmit, setUpdate }) {
   const handleClose = () => {
     onClose();
   };
@@ -51,7 +51,7 @@ export default function ContactInfoEditModal({ isOpen, onClose, selectedEditItem
           </Toolbar>
         </AppBar>
 
-        <MainCard title="Contact Information Update">
+        <MainCard title="User Contact Update">
           <Box>
             {/* Two half-width input boxes */}
             <Grid container spacing={2} mb={2}>
@@ -82,10 +82,10 @@ export default function ContactInfoEditModal({ isOpen, onClose, selectedEditItem
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="Phone Number 1"
-                  id="phone_number_one"
-                  name="phone_number_one"
-                  value={selectedEditItem.phone_number_one}
+                  label="Phone Number"
+                  id="phone_number"
+                  name="phone_number"
+                  value={selectedEditItem.phone_number}
                   onChange={handleInputValueChange}
                   required
                 />
@@ -93,82 +93,38 @@ export default function ContactInfoEditModal({ isOpen, onClose, selectedEditItem
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="Phone Number 2"
-                  id="phone_number_two"
-                  name="phone_number_two"
-                  value={selectedEditItem.phone_number_two}
+                  label="Subject"
+                  id="subject"
+                  name="subject"
+                  value={selectedEditItem.subject}
                   onChange={handleInputValueChange}
+                  required
                 />
               </Grid>
             </Grid>
             {/* Two half-width input boxes */}
-            <Grid container spacing={2} mb={2}>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Address"
-                  id="address"
-                  name="address"
-                  value={selectedEditItem.address}
-                  onChange={handleInputValueChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Facebook Link"
-                  id="facebook_link"
-                  name="facebook_link"
-                  value={selectedEditItem.facebook_link}
-                  onChange={handleInputValueChange}
-                />
-              </Grid>
-            </Grid>
-            {/* Two half-width input boxes */}
-            <Grid container spacing={2} mb={2}>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Instagram Link"
-                  id="instagram_link"
-                  name="instagram_link"
-                  value={selectedEditItem.instagram_link}
-                  onChange={handleInputValueChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Linkedin Link"
-                  id="linkedin_link"
-                  name="linkedin_link"
-                  value={selectedEditItem.linkedin_link}
-                  onChange={handleInputValueChange}
-                />
-              </Grid>
-            </Grid>
-            {/* Two half-width input boxes */}
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Youtube Link"
-                  id="youtube_link"
-                  name="youtube_link"
-                  value={selectedEditItem.youtube_link}
-                  onChange={handleInputValueChange}
-                  required
-                />
-              </Grid>
-            </Grid>
+
+            {/* Full-width input box */}
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                label="Message"
+                id="message"
+                name="message"
+                value={selectedEditItem.message}
+                onChange={handleInputValueChange}
+                required
+                inputProps={{ minLength: 3 }}
+                multiline
+                rows={4}
+              />
+            </Box>
 
             {/* Submit button */}
             <Grid container justifyContent="flex-start" mt={2}>
               <Grid item>
                 <Button variant="contained" color="secondary" onClick={handleSubmit}>
-                  Update
+                  Submit
                 </Button>
               </Grid>
             </Grid>

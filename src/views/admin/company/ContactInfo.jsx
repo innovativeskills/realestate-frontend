@@ -139,7 +139,7 @@ const ContactInfo = () => {
   };
 
   return (
-    <MainCard title="Company Summary Input">
+    <MainCard title="Contact Info Input">
       {/* input form start */}
       <form onSubmit={handleInputValueSubmit} style={{ marginBottom: '20px' }}>
         <Box>
@@ -259,7 +259,7 @@ const ContactInfo = () => {
       </form>
       {/* input form end */}
 
-      <SubCard title="Company Summary List">
+      <SubCard title="Contact Info List">
         {/* table section start */}
         <div>
           {/* pre table section start */}

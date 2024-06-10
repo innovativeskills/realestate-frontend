@@ -70,7 +70,7 @@ export default function MemberShipEditModal({ isOpen, onClose, selectedEditItem,
           </Toolbar>
         </AppBar>
 
-        <MainCard title="Membership Details Update">
+        <MainCard title="Details Update">
           <Box>
             {/* Two half-width input boxes */}
             <Grid container spacing={2} mb={2}>

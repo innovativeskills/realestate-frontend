@@ -22,7 +22,6 @@ import SearchInput from 'components/shared/SearchInput';
 import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
-import CategoryEditModal from 'components/modal/edit-modal/category/CategoryEditModal';
 import { fetchCategory } from 'store/category/categoryReducer';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
 import { fetchBannerDetails } from 'store/banner/banner';
@@ -33,8 +32,7 @@ const initialInputValue = {
   discount: '',
   image: ''
 };
-const categoryURL = 'https://website.innovativeskillsbd.com/mainCategories/categories/';
-const bannerDetailsURL = 'url';
+const bannerDetailsURL = 'https://realestateback.innovativeskillsbd.com/api/banner/';
 
 const MainBannerDetails = () => {
   const dispatch = useDispatch();
@@ -52,18 +50,12 @@ const MainBannerDetails = () => {
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentBannerDetailsList = filteredBannerDetailsList.length ? filteredBannerDetailsList.slice(firstPostIndex, lastPostIndex) : [];
   const [updatedField, setUpdatedField] = useState(null);
+  console.log(bannerFromState);
   useEffect(() => {
     const result = bannerDetailsList.filter((item) => {
       return searchInput.toLowerCase() === '' ? item : item.title.toLowerCase().includes(searchInput);
     });
-
-    if (result.length) {
-      setFilteredBannerDetailsList(result);
-    } else if (!searchInput.length) {
-      setFilteredBannerDetailsList(bannerDetailsList);
-    } else {
-      setFilteredBannerDetailsList([]);
-    }
+    setFilteredBannerDetailsList(result);
   }, [searchInput, bannerDetailsList]);
 
   if (filteredBannerDetailsList.length) {
@@ -99,6 +91,7 @@ const MainBannerDetails = () => {
     formData.append('discount', bannerDetailsInput.discount);
     formData.append('image', bannerDetailsInput.image);
     const response = await apiService.postDataAsFormData(bannerDetailsURL, formData);
+    console.log(response);
     if (response.status == 201) {
       toast.success('Successfully added!');
       dispatch(fetchBannerDetails(bannerDetailsURL));

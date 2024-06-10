@@ -1,9 +1,10 @@
 // assets
-import { IconStar } from '@tabler/icons-react';
+import { IconStar, IconPhone } from '@tabler/icons-react';
 
 // constant
 const icons = {
-  IconStar
+  IconStar,
+  IconPhone
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -19,6 +20,14 @@ const client = {
       type: 'item',
       url: 'client/review',
       icon: icons.IconStar,
+      breadcrumbs: false
+    },
+    {
+      id: 'contact',
+      title: 'User Contact',
+      type: 'item',
+      url: 'client/contact',
+      icon: icons.IconPhone,
       breadcrumbs: false
     }
   ]

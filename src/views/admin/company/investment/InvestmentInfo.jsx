@@ -24,10 +24,10 @@ import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchClientReview } from 'store/client-review/clientReview';
 import MemberShipEditModal from 'components/modal/edit-modal/membership/MemberShipEditModal';
 import TextEditor from 'components/shared/TextEditor';
 import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
+import { fetchInvestmentDetails } from 'store/investment/investmentSlice';
 
 const initialInputValue = {
   title: '',
@@ -36,15 +36,15 @@ const initialInputValue = {
 };
 
 const membershipURL = 'https://realestateback.innovativeskillsbd.com/api/membership/';
+const investmentURL = 'https://realestateback.innovativeskillsbd.com/api/investment/';
 
-const MembershipInfo = () => {
+const InvestmentInfo = () => {
   const dispatch = useDispatch();
-  // const clientReviewFromState = useSelector((state) => state.clientReview);
-  const mebershDetailsFromState = useSelector((state) => state.membership);
-  const [membershipDetailsInput, setMembershipDetailsInput] = useState(initialInputValue);
-  const [membershipDetailsList, setMembershipDetailsList] = useState(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  const [filteredMembershipDetailsList, setFilteredMembershipDetailsList] = useState(
-    membershipDetailsList.length ? membershipDetailsList : []
+  const investmentDetailsFromState = useSelector((state) => state.investment);
+  const [investmentDetailsInput, setInvestmentDetailsInput] = useState(initialInputValue);
+  const [investmentDetailsList, setInvestmentDetailsList] = useState(investmentDetailsFromState.length ? investmentDetailsFromState : []);
+  const [filteredInvestmentDetailsList, setFilteredInvestmentDetailsList] = useState(
+    investmentDetailsList.length ? investmentDetailsList : []
   );
   const [searchInput, setSearchInput] = useState('');
   const [postPerPage, setPostPerPage] = useState(5);
@@ -54,30 +54,29 @@ const MembershipInfo = () => {
   const [selectedEditItem, setSelectedEditItem] = useState('');
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const currentMembershipDetailsList = filteredMembershipDetailsList.length
-    ? filteredMembershipDetailsList.slice(firstPostIndex, lastPostIndex)
+  const currentInvestmentDetailsList = filteredInvestmentDetailsList.length
+    ? filteredInvestmentDetailsList.slice(firstPostIndex, lastPostIndex)
     : [];
   const [updatedField, setUpdatedField] = useState(null);
-
   useEffect(() => {
-    const result = membershipDetailsList.filter((item) => {
+    const result = investmentDetailsList.filter((item) => {
       return searchInput.toLowerCase() === '' ? item : item.title.toLowerCase().includes(searchInput.toLowerCase());
     });
-    setFilteredMembershipDetailsList(result);
-  }, [searchInput, membershipDetailsList]);
+    setFilteredInvestmentDetailsList(result);
+  }, [searchInput, investmentDetailsList]);
 
-  if (filteredMembershipDetailsList.length) {
-    if (Math.ceil(filteredMembershipDetailsList.length / postPerPage) < currentPage) {
+  if (filteredInvestmentDetailsList.length) {
+    if (Math.ceil(filteredInvestmentDetailsList.length / postPerPage) < currentPage) {
       setcurrentPage(1);
     }
   }
 
   useEffect(() => {
-    setMembershipDetailsList(mebershDetailsFromState.length ? mebershDetailsFromState : []);
-  }, [mebershDetailsFromState]);
+    setInvestmentDetailsList(investmentDetailsFromState.length ? investmentDetailsFromState : []);
+  }, [investmentDetailsFromState]);
 
   const handleInputValueChange = (e) => {
-    setMembershipDetailsInput((prev) => {
+    setInvestmentDetailsInput((prev) => {
       return {
         ...prev,
         [e.target.name]: e.target.value
@@ -85,7 +84,7 @@ const MembershipInfo = () => {
     });
   };
   const handleEditorValueChange = (content) => {
-    setMembershipDetailsInput((prev) => {
+    setInvestmentDetailsInput((prev) => {
       return {
         ...prev,
         description: content
@@ -93,7 +92,7 @@ const MembershipInfo = () => {
     });
   };
   const handleFileChange = (event) => {
-    setMembershipDetailsInput((prev) => {
+    setInvestmentDetailsInput((prev) => {
       return {
         ...prev,
         [event.target.name]: event.target.files[0]
@@ -103,26 +102,27 @@ const MembershipInfo = () => {
   const handleInputValueSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    for (const key in membershipDetailsInput) {
-      if (Object.hasOwnProperty.call(membershipDetailsInput, key)) {
-        const value = membershipDetailsInput[key];
+    console.log(investmentDetailsInput);
+    for (const key in investmentDetailsInput) {
+      if (Object.hasOwnProperty.call(investmentDetailsInput, key)) {
+        const value = investmentDetailsInput[key];
         formData.append(key, value);
       }
     }
-    const response = await apiService.postDataAsFormData(membershipURL, formData);
+    const response = await apiService.postDataAsFormData(investmentURL, formData);
     if (response.status == 201) {
       toast.success('Successfully added!');
-      dispatch(fetchMembershipDetails(membershipURL));
-      membershipDetailsInput(initialInputValue);
+      dispatch(fetchInvestmentDetails(investmentURL));
+      setInvestmentDetailsInput(initialInputValue);
     } else if (response.response.status == 400) {
       const resultArray = errorObjectValueToArray(response.response.data);
       toast.error(`${toTitleCase(resultArray[0])}`);
     } else {
       toast.error('Something went wrong !');
     }
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
   };
   const changePage = (pageNumber) => {
     setcurrentPage(pageNumber);
@@ -134,11 +134,11 @@ const MembershipInfo = () => {
 
   const handleDeleteConfirm = async () => {
     const id = selectedEditItem.id;
-    const response = await apiService.deleteData(`${membershipURL}${id}/`);
+    const response = await apiService.deleteData(`${investmentURL}${id}/`);
     if (response.status == 204) {
       setIsDeleteModalOpen(false);
       toast.success('Deleted successfully');
-      dispatch(fetchMembershipDetails(membershipURL));
+      dispatch(fetchInvestmentDetails(investmentURL));
     } else {
       toast.error('Something went wrong');
     }
@@ -177,7 +177,6 @@ const MembershipInfo = () => {
 
   const handleConfirmEdit = async () => {
     const id = selectedEditItem.id;
-    console.log(selectedEditItem);
     const formData = new FormData();
     if (updatedField) {
       for (const key in updatedField) {
@@ -188,11 +187,11 @@ const MembershipInfo = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`${membershipURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${investmentURL}${id}`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
-      dispatch(fetchMembershipDetails(membershipURL)); //dispatch action to update state
+      dispatch(fetchInvestmentDetails(investmentURL)); //dispatch action to update state
     } else {
       toast.error('Something went wrong.');
       setIsEditModalShow(false);
@@ -203,7 +202,7 @@ const MembershipInfo = () => {
   };
 
   return (
-    <MainCard title="Membership Input">
+    <MainCard title="Investment Input">
       {/* input form start */}
       <form onSubmit={handleInputValueSubmit} style={{ marginBottom: '20px' }}>
         <Box>
@@ -215,7 +214,7 @@ const MembershipInfo = () => {
                 label="Title"
                 id="title"
                 name="title"
-                value={membershipDetailsInput.title}
+                value={investmentDetailsInput.title}
                 onChange={handleInputValueChange}
                 required
               />
@@ -238,7 +237,7 @@ const MembershipInfo = () => {
           </Grid>
           {/* Full-width input box */}
           <Box mb={2}>
-            <TextEditor value={membershipDetailsInput.description} handlechange={handleEditorValueChange} label={'Description input'} />
+            <TextEditor value={investmentDetailsInput.description} handlechange={handleEditorValueChange} label={'Description input'} />
           </Box>
 
           {/* Submit button */}
@@ -253,7 +252,7 @@ const MembershipInfo = () => {
       </form>
       {/* input form end */}
 
-      <SubCard title="Membership List">
+      <SubCard title="Investment List">
         {/* table section start */}
         <div>
           {/* pre table section start */}
@@ -277,8 +276,8 @@ const MembershipInfo = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentMembershipDetailsList &&
-                  currentMembershipDetailsList.map((row, index) => (
+                {currentInvestmentDetailsList &&
+                  currentInvestmentDetailsList.map((row, index) => (
                     <TableRow key={uid()}>
                       <TableCell>{(currentPage - 1) * postPerPage + 1 + index}</TableCell>
                       <TableCell>{row.title}</TableCell>
@@ -302,7 +301,7 @@ const MembershipInfo = () => {
             changePage={changePage}
             currentPage={currentPage}
             postPerPage={postPerPage}
-            totalPost={membershipDetailsList.length}
+            totalPost={investmentDetailsList.length}
           />
           {/* pagination section end */}
         </div>
@@ -325,4 +324,4 @@ const MembershipInfo = () => {
   );
 };
 
-export default MembershipInfo;
+export default InvestmentInfo;

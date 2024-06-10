@@ -2,27 +2,27 @@ import { combineReducers } from 'redux';
 
 // reducer import
 import customizationReducer from './customizationReducer';
-import subCategorySlice from './sub-category/SubCategoryReducer';
-import categorySlice from './category/categoryReducer';
-import teacherDetailsSlice from './teacher/teacherReducer';
-import courseDetailsReducer from './course/courseDetailsReducer';
-import courseContentReducer from './course/courseContentReducer';
-import bannerDetailsSlice from './banner/banner'
 import companySummarySlice from './company/companySummary';
 import clientReview from './client-review/clientReview';
 import membershipDetailsSlice from './membership/membershipDetailsSlice';
 import contactInfoSlice from './company/contactInfoSlice';
-
+import investmentSlice from './investment/investmentSlice';
+import teamMemberSlice from './company/teamMemberSlice';
+import userContactSlice from './user-contact/userContactSlice';
+import projectInfoSlice from './project/projectInfoSlice';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
   customization: customizationReducer,
-  banner: bannerDetailsSlice,
   companySummary: companySummarySlice,
   clientReview: clientReview,
   membership: membershipDetailsSlice,
-  contactInfo : contactInfoSlice,
+  contactInfo: contactInfoSlice,
+  investment: investmentSlice,
+  teamMember: teamMemberSlice,
+  userContact: userContactSlice,
+  projectInfo: projectInfoSlice
 });
 
 export default reducer;
