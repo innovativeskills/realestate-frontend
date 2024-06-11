@@ -5,7 +5,17 @@ import Loadable from 'ui-component/Loadable';
 
 //protected guard component
 import AuthGuard from 'components/shared/Authentication/AuthGuard';
-import UtilitiesShadow from 'views/utilities/Shadow';
+
+//auth route
+import MinimalLayout from 'layout/MinimalLayout';
+const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication3/Login3')));
+const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication3/Register3')));
+
+//design page imports
+const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
+const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
+const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
+const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 //client page imports
 const EntryPage = Loadable(lazy(() => import('views/client/EntryPage')));
@@ -41,6 +51,21 @@ const ClientAdminRoutes = [
       {
         path: '/about',
         element: <AboutPage />
+      },
+      // ===========||  authentication routing ||======== //
+      {
+        path: '/auth',
+        element: <MinimalLayout />,
+        children: [
+          {
+            path: '/auth/login',
+            element: <AuthLogin3 />
+          },
+          {
+            path: '/auth/register',
+            element: <AuthRegister3 />
+          }
+        ]
       },
       // ===========||  admin panel routing ||======== //
       {
@@ -160,6 +185,28 @@ const ClientAdminRoutes = [
                     <ProjectSummary />
                   </AuthGuard>
                 )
+              }
+            ]
+          },
+          //design template section
+          {
+            path: '/admin/design',
+            children: [
+              {
+                path: 'typography',
+                element: <UtilsTypography />
+              },
+              {
+                path: 'color',
+                element: <UtilsColor />
+              },
+              {
+                path: 'shadow',
+                element: <UtilsShadow />
+              },
+              {
+                path: 'sample-page',
+                element: <SamplePage />
               }
             ]
           }

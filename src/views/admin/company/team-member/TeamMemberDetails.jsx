@@ -51,6 +51,7 @@ const teamMemberURL = 'https://realestateback.innovativeskillsbd.com/api/teammem
 const TeamMemberDetails = () => {
   const dispatch = useDispatch();
   const positionFromState = useSelector((state) => state.position);
+
   const teamMemberFromState = useSelector((state) => state.teamMember);
   const [teamMemberDetailsInput, setTeamMemberDetailsInput] = useState(initialInputValue);
   const [teamMemberDetailsList, setTeamMemberDetailsList] = useState(teamMemberFromState.length ? teamMemberFromState : []);
@@ -69,7 +70,7 @@ const TeamMemberDetails = () => {
     ? filteredTeamMemberDetailsList.slice(firstPostIndex, lastPostIndex)
     : [];
   const [updatedField, setUpdatedField] = useState(null);
-  console.log(positionFromState);
+
   useEffect(() => {
     const result = teamMemberDetailsList.filter((item) => {
       return searchInput.toLowerCase() === '' ? item : item.name.toLowerCase().includes(searchInput.toLowerCase());
@@ -399,7 +400,7 @@ const TeamMemberDetails = () => {
               <TableBody>
                 {currentTeamMemberDetailsList &&
                   currentTeamMemberDetailsList.map((row, index) => (
-                    <TableRow key={uid()}>
+                    <TableRow key={index}>
                       <TableCell>{(currentPage - 1) * postPerPage + 1 + index}</TableCell>
                       <TableCell>{row.name}</TableCell>
                       <TableCell>
@@ -444,3 +445,5 @@ const TeamMemberDetails = () => {
     </MainCard>
   );
 };
+
+export default TeamMemberDetails;

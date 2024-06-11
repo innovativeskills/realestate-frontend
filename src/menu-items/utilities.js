@@ -1,12 +1,13 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandChrome } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconTypography,
   IconPalette,
   IconShadow,
-  IconWindmill
+  IconWindmill,
+  IconBrandChrome
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -20,7 +21,7 @@ const utilities = {
       id: 'util-typography',
       title: 'Typography',
       type: 'item',
-      url: 'admin/utils/util-typography',
+      url: 'design/typography',
       icon: icons.IconTypography,
       breadcrumbs: false
     },
@@ -28,7 +29,7 @@ const utilities = {
       id: 'util-color',
       title: 'Color',
       type: 'item',
-      url: 'admin/utils/util-color',
+      url: 'design/color',
       icon: icons.IconPalette,
       breadcrumbs: false
     },
@@ -36,8 +37,16 @@ const utilities = {
       id: 'util-shadow',
       title: 'Shadow',
       type: 'item',
-      url: 'admin/utils/util-shadow',
+      url: 'design/shadow',
       icon: icons.IconShadow,
+      breadcrumbs: false
+    },
+    {
+      id: 'sample-page',
+      title: 'Sample Page',
+      type: 'item',
+      url: 'design/sample-page',
+      icon: icons.IconBrandChrome,
       breadcrumbs: false
     }
   ]

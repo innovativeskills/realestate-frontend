@@ -10,7 +10,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  Typography,
   TableHead,
   TableRow,
   Paper,
@@ -28,8 +27,6 @@ import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchProjectInfo } from 'store/project/projectInfoSlice';
-import ProjectInfoEditModal from 'components/modal/edit-modal/project/project-info/ProjectInfoEditModal';
 import { fetchProjectSummary } from 'store/project/projectSummarySlice';
 import ProjectSummaryEditModal from 'components/modal/edit-modal/project/project-summary/ProjectSummaryEditModal';
 
@@ -150,7 +147,7 @@ const ProjectSummary = () => {
   };
 
   return (
-    <MainCard title="Project Info Input">
+    <MainCard title="Project Summary Input">
       {/* input form start */}
       <form onSubmit={handleInputValueSubmit} style={{ marginBottom: '20px' }}>
         <Box>
@@ -227,7 +224,7 @@ const ProjectSummary = () => {
       </form>
       {/* input form end */}
 
-      <SubCard title="Project Info List">
+      <SubCard title="Project Summary List">
         {/* table section start */}
         <div>
           {/* pre table section start */}
