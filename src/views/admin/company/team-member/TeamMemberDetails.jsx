@@ -17,17 +17,18 @@ import {
   Box,
   Grid,
   TextField,
-  Button
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import SearchInput from 'components/shared/SearchInput';
 import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchClientReview } from 'store/client-review/clientReview';
-import MemberShipEditModal from 'components/modal/edit-modal/membership/MemberShipEditModal';
 import TextEditor from 'components/shared/TextEditor';
-import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
 import TeamMemberEditModal from 'components/modal/edit-modal/team-member/TeamMemberEditModal';
 import { fetchTeamMember } from 'store/company/teamMemberSlice';
 
@@ -41,14 +42,15 @@ const initialInputValue = {
   twitter_link: '',
   instagram_link: '',
   linkedin_link: '',
-  dribble_link: ''
+  dribble_link: '',
+  position: ''
 };
 
-const membershipURL = 'https://realestateback.innovativeskillsbd.com/api/membership/';
-const teamMemberURL = 'url';
+const teamMemberURL = 'https://realestateback.innovativeskillsbd.com/api/teammember/';
 
 const TeamMemberDetails = () => {
   const dispatch = useDispatch();
+  const positionFromState = useSelector((state) => state.position);
   const teamMemberFromState = useSelector((state) => state.teamMember);
   const [teamMemberDetailsInput, setTeamMemberDetailsInput] = useState(initialInputValue);
   const [teamMemberDetailsList, setTeamMemberDetailsList] = useState(teamMemberFromState.length ? teamMemberFromState : []);
@@ -67,6 +69,7 @@ const TeamMemberDetails = () => {
     ? filteredTeamMemberDetailsList.slice(firstPostIndex, lastPostIndex)
     : [];
   const [updatedField, setUpdatedField] = useState(null);
+  console.log(positionFromState);
   useEffect(() => {
     const result = teamMemberDetailsList.filter((item) => {
       return searchInput.toLowerCase() === '' ? item : item.name.toLowerCase().includes(searchInput.toLowerCase());
@@ -120,7 +123,7 @@ const TeamMemberDetails = () => {
     const response = await apiService.postDataAsFormData(teamMemberURL, formData);
     if (response.status == 201) {
       toast.success('Successfully added!');
-      // dispatch(fetchMembershipDetails(membershipURL));
+      dispatch(fetchTeamMember(teamMemberURL));
       setTeamMemberDetailsInput(initialInputValue);
     } else if (response.response.status == 400) {
       const resultArray = errorObjectValueToArray(response.response.data);
@@ -194,7 +197,7 @@ const TeamMemberDetails = () => {
         }
       }
     }
-    const response = await apiService.updateDataAsFormData(`${teamMemberURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${teamMemberURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
@@ -331,6 +334,27 @@ const TeamMemberDetails = () => {
                 required
               />
             </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel id="subcategory">Select Position</InputLabel>
+                <Select
+                  required
+                  labelId="position"
+                  id="position"
+                  value={teamMemberDetailsInput.position}
+                  label="Select Position"
+                  name="position"
+                  onChange={handleInputValueChange}
+                >
+                  <MenuItem>Select</MenuItem>
+                  {positionFromState.map((singleMember) => (
+                    <MenuItem key={uid()} value={singleMember.id}>
+                      {singleMember.position}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
           {/* Full-width input box */}
           <Box mb={2}>
@@ -408,15 +432,6 @@ const TeamMemberDetails = () => {
       <DeleteModal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose} handleDelete={handleDeleteConfirm} />
 
       {/* Edit Modal */}
-      {/* <MemberShipEditModal
-        isOpen={isEditModalshow}
-        onClose={handleEditModalClose}
-        handleSubmit={handleConfirmEdit}
-        selectedEditItem={selectedEditItem}
-        setSelectedEditItem={setSelectedEditItem}
-        setUpdate={setUpdatedField}
-        handleTextEditorChange={handleTextEditorValueChange}
-      /> */}
       <TeamMemberEditModal
         isOpen={isEditModalshow}
         onClose={handleEditModalClose}
@@ -429,5 +444,3 @@ const TeamMemberDetails = () => {
     </MainCard>
   );
 };
-
-export default TeamMemberDetails;

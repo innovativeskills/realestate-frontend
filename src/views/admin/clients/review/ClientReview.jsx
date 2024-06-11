@@ -33,7 +33,7 @@ const initialInputValue = {
   image: ''
 };
 
-const clientReviewURL = 'url';
+const clientReviewURL = 'https://realestateback.innovativeskillsbd.com/api/clientreview/';
 
 const ClientReviewInputPage = () => {
   const dispatch = useDispatch();
@@ -166,7 +166,7 @@ const ClientReviewInputPage = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`${clientReviewURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${clientReviewURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');

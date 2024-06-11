@@ -7,13 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { forwardRef } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
-import {
-  Typography,
-  Box,
-  Grid,
-  TextField,
-  Button
-} from '@mui/material';
+import { Typography, Box, Grid, TextField, Button } from '@mui/material';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -96,7 +90,6 @@ export default function MainBannerEditModal({ isOpen, onClose, selectedEditItem,
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  type="number"
                   label="Discount"
                   id="discount"
                   name="discount"

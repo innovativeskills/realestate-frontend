@@ -187,7 +187,7 @@ const InvestmentInfo = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`${investmentURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${investmentURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');

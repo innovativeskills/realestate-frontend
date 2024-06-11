@@ -13,11 +13,18 @@ import themes from 'themes';
 
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
-import { useEffect } from 'react';;
+import { useEffect } from 'react';
 import { fetchContactInfo } from 'store/company/contactInfoSlice';
 import { fetchCompanySummary } from 'store/company/companySummary';
-import { fetchBannerDetails } from 'store/banner/banner';
+import { fetchBannerDetails } from 'store/banner/bannerDetailsSlice';
 import { fetchMembershipDetails } from 'store/membership/membershipDetailsSlice';
+import { fetchClientReview } from 'store/client-review/clientReview';
+import { fetchUserContact } from 'store/user-contact/userContactSlice';
+import { fetchInvestmentDetails } from 'store/investment/investmentSlice';
+import { fetchTeamMember } from 'store/company/teamMemberSlice';
+import { fetchPosition } from 'store/position/positionSlice';
+import { fetchProjectInfo } from 'store/project/projectInfoSlice';
+import { fetchProjectSummary } from 'store/project/projectSummarySlice';
 
 // ==============================|| APP ||============================== //
 
@@ -30,6 +37,13 @@ const App = () => {
     dispatch(fetchCompanySummary('https://realestateback.innovativeskillsbd.com/api/companysummary/'));
     dispatch(fetchBannerDetails('https://realestateback.innovativeskillsbd.com/api/banner/'));
     dispatch(fetchMembershipDetails('https://realestateback.innovativeskillsbd.com/api/membership/'));
+    dispatch(fetchClientReview('https://realestateback.innovativeskillsbd.com/api/clientreview/'));
+    dispatch(fetchUserContact('https://realestateback.innovativeskillsbd.com/api/usercontact/'));
+    dispatch(fetchInvestmentDetails('https://realestateback.innovativeskillsbd.com/api/investment/'));
+    dispatch(fetchTeamMember('https://realestateback.innovativeskillsbd.com/api/teammember/'));
+    dispatch(fetchPosition('https://realestateback.innovativeskillsbd.com/api/position/'));
+    dispatch(fetchProjectInfo('https://realestateback.innovativeskillsbd.com/api/project/'));
+    dispatch(fetchProjectSummary('https://realestateback.innovativeskillsbd.com/api/projectsummary/'));
   }, []);
 
   return (

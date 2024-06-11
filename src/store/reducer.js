@@ -10,11 +10,15 @@ import investmentSlice from './investment/investmentSlice';
 import teamMemberSlice from './company/teamMemberSlice';
 import userContactSlice from './user-contact/userContactSlice';
 import projectInfoSlice from './project/projectInfoSlice';
+import projectSummarySlice from './project/projectSummarySlice';
+import bannerDetailsSlice from './banner/bannerDetailsSlice';
+import positionSlice from './position/positionSlice';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
   customization: customizationReducer,
+  banner: bannerDetailsSlice,
   companySummary: companySummarySlice,
   clientReview: clientReview,
   membership: membershipDetailsSlice,
@@ -22,7 +26,9 @@ const reducer = combineReducers({
   investment: investmentSlice,
   teamMember: teamMemberSlice,
   userContact: userContactSlice,
-  projectInfo: projectInfoSlice
+  projectInfo: projectInfoSlice,
+  projectSummary: projectSummarySlice,
+  position: positionSlice
 });
 
 export default reducer;

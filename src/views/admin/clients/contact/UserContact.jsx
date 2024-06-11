@@ -25,7 +25,7 @@ const initialInputValue = {
   message: ''
 };
 
-const userContactURL = 'URL';
+const userContactURL = 'https://realestateback.innovativeskillsbd.com/api/usercontact/';
 
 const UserContact = () => {
   const dispatch = useDispatch();

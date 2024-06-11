@@ -28,9 +28,8 @@ import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchClientReview } from 'store/client-review/clientReview';
-import ClientReviewEditModal from 'components/modal/edit-modal/client-review/ClientReviewEditModal';
 import { fetchProjectInfo } from 'store/project/projectInfoSlice';
+import ProjectInfoEditModal from 'components/modal/edit-modal/project/project-info/ProjectInfoEditModal';
 
 const initialInputValue = {
   project_name: '',
@@ -40,7 +39,7 @@ const initialInputValue = {
   agent: ''
 };
 
-const projectInfoURL = 'url';
+const projectInfoURL = 'https://realestateback.innovativeskillsbd.com/api/project/';
 
 const ProjectInfo = () => {
   const dispatch = useDispatch();
@@ -128,11 +127,11 @@ const ProjectInfo = () => {
 
   const handleDeleteConfirm = async () => {
     const id = selectedEditItem.id;
-    const response = await apiService.deleteData(`${clientReviewURL}${id}/`);
+    const response = await apiService.deleteData(`${projectInfoURL}${id}/`);
     if (response.status == 204) {
       setIsDeleteModalOpen(false);
       toast.success('Deleted successfully');
-      dispatch(fetchClientReview(clientReviewURL));
+      dispatch(fetchProjectInfo(projectInfoURL));
     } else {
       toast.error('Something went wrong');
     }
@@ -153,18 +152,8 @@ const ProjectInfo = () => {
     setIsEditModalShow(true);
   };
 
-  const handleEditValueChange = (e) => {
-    setSelectedEditItem((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value
-      };
-    });
-  };
-
   const handleConfirmEdit = async () => {
     const id = selectedEditItem.id;
-    console.log(selectedEditItem);
     const formData = new FormData();
     if (updatedField) {
       for (const key in updatedField) {
@@ -175,11 +164,11 @@ const ProjectInfo = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`${clientReviewURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${projectInfoURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
-      dispatch(fetchClientReview(clientReviewURL)); //dispatch action to update state
+      dispatch(fetchProjectInfo(projectInfoURL)); //dispatch action to update state
     } else {
       toast.error('Something went wrong.');
       setIsEditModalShow(false);
@@ -346,7 +335,15 @@ const ProjectInfo = () => {
       <DeleteModal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose} handleDelete={handleDeleteConfirm} />
 
       {/* Edit Modal */}
-      <ClientReviewEditModal
+      {/* <ClientReviewEditModal
+        isOpen={isEditModalshow}
+        onClose={handleEditModalClose}
+        handleSubmit={handleConfirmEdit}
+        selectedEditItem={selectedEditItem}
+        setSelectedEditItem={setSelectedEditItem}
+        setUpdate={setUpdatedField}
+      /> */}
+      <ProjectInfoEditModal
         isOpen={isEditModalshow}
         onClose={handleEditModalClose}
         handleSubmit={handleConfirmEdit}

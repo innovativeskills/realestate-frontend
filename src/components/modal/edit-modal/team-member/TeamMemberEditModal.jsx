@@ -7,13 +7,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { forwardRef } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
-import { Typography, Box, Grid, TextField, Button, DialogContent } from '@mui/material';
+import { Typography, Box, Grid, TextField, Button, DialogContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import TextEditor from 'components/shared/TextEditor';
+import { useSelector } from 'react-redux';
+import { uid } from 'uid';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 export default function TeamMemberEditModal({
   isOpen,
   onClose,
@@ -23,6 +24,7 @@ export default function TeamMemberEditModal({
   setUpdate,
   handleTextEditorChange
 }) {
+  const positionFromState = useSelector((state) => state.position);
   const handleClose = () => {
     onClose();
   };
@@ -198,6 +200,27 @@ export default function TeamMemberEditModal({
                     onChange={handleInputChange}
                     required
                   />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="subcategory">Select Position</InputLabel>
+                    <Select
+                      required
+                      labelId="position"
+                      id="position"
+                      value={selectedEditItem.position}
+                      label="Select Position"
+                      name="position"
+                      onChange={handleInputChange}
+                    >
+                      <MenuItem>Select</MenuItem>
+                      {positionFromState.map((singleMember) => (
+                        <MenuItem key={uid()} value={singleMember.id}>
+                          {singleMember.position}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               {/* Full-width input box */}

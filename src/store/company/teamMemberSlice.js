@@ -95,7 +95,7 @@ const fetchTeamMember = createAsyncThunk('fetchTeamMember', async (url) => {
 
 const TeamMemberSlice = createSlice({
   name: 'teamMember',
-  initialState: initialData,
+  initialState: [],
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchTeamMember.fulfilled, (state, action) => {

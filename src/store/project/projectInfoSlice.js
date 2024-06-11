@@ -9,7 +9,7 @@ const initialData = [
     description:
       'Sunrise Apartments is a luxurious residential project offering modern amenities and serene living spaces. Located in the heart of the city, it features 2, 3, and 4 BHK apartments with stunning views and state-of-the-art facilities.',
     brochure_pdf: 'https://example.com/brochures/sunrise_apartments.pdf',
-    agent: 'John Smith'
+    agent: 2
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ const initialData = [
     description:
       'Green Valley Villas offers a peaceful retreat with its eco-friendly design and lush green surroundings. The project includes spacious villas with private gardens, modern amenities, and excellent connectivity to the city.',
     brochure_pdf: 'https://example.com/brochures/green_valley_villas.pdf',
-    agent: 'Emma Brown'
+    agent: 4
   }
 ];
 

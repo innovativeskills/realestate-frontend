@@ -22,9 +22,8 @@ import SearchInput from 'components/shared/SearchInput';
 import SelectPostPerPage from 'components/shared/SelectPostPerPage';
 import PaginationComponent from 'components/pagination/PaginationComponent';
 import DeleteModal from 'components/modal/DeleteModal';
-import { fetchCategory } from 'store/category/categoryReducer';
 import { errorObjectValueToArray, toTitleCase } from 'utils/utils';
-import { fetchBannerDetails } from 'store/banner/banner';
+import { fetchBannerDetails } from 'store/banner/bannerDetailsSlice';
 import MainBannerEditModal from 'components/modal/edit-modal/main-banner/MainBannerEditModal';
 
 const initialInputValue = {
@@ -50,7 +49,6 @@ const MainBannerDetails = () => {
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentBannerDetailsList = filteredBannerDetailsList.length ? filteredBannerDetailsList.slice(firstPostIndex, lastPostIndex) : [];
   const [updatedField, setUpdatedField] = useState(null);
-  console.log(bannerFromState);
   useEffect(() => {
     const result = bannerDetailsList.filter((item) => {
       return searchInput.toLowerCase() === '' ? item : item.title.toLowerCase().includes(searchInput);
@@ -91,7 +89,6 @@ const MainBannerDetails = () => {
     formData.append('discount', bannerDetailsInput.discount);
     formData.append('image', bannerDetailsInput.image);
     const response = await apiService.postDataAsFormData(bannerDetailsURL, formData);
-    console.log(response);
     if (response.status == 201) {
       toast.success('Successfully added!');
       dispatch(fetchBannerDetails(bannerDetailsURL));
@@ -120,9 +117,10 @@ const MainBannerDetails = () => {
     if (response.status == 204) {
       setIsDeleteModalOpen(false);
       toast.success('Deleted successfully');
-      dispatch(fetchCategory(categoryURL));
+      dispatch(fetchBannerDetails(bannerDetailsURL));
     } else {
       toast.error('Something went wrong');
+      setIsDeleteModalOpen(false);
     }
   };
 
@@ -162,7 +160,7 @@ const MainBannerDetails = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`bannerDetailsURL${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${bannerDetailsURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
@@ -170,6 +168,9 @@ const MainBannerDetails = () => {
     } else {
       toast.error('Something went wrong.');
       setIsEditModalShow(false);
+    }
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
     }
   };
 

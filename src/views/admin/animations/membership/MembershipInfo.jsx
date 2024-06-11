@@ -113,7 +113,7 @@ const MembershipInfo = () => {
     if (response.status == 201) {
       toast.success('Successfully added!');
       dispatch(fetchMembershipDetails(membershipURL));
-      membershipDetailsInput(initialInputValue);
+      setMembershipDetailsInput(initialInputValue);
     } else if (response.response.status == 400) {
       const resultArray = errorObjectValueToArray(response.response.data);
       toast.error(`${toTitleCase(resultArray[0])}`);
@@ -188,7 +188,7 @@ const MembershipInfo = () => {
       }
     }
 
-    const response = await apiService.updateDataAsFormData(`${membershipURL}${id}`, formData);
+    const response = await apiService.updateDataAsFormData(`${membershipURL}${id}/`, formData);
     if (response.status == 200) {
       setIsEditModalShow(false);
       toast.success('Successfully Updated');
